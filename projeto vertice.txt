@@ -1,0 +1,662 @@
+I will design a sleek, cybersecurity-focused website for VÉRTICE CYBERSEGURANÇA, inspired by the structure and services of *Diretiva Informática* but elevated with the Linear/Raycast aesthetic (dark mode, glowing accents, premium typography).
+
+### Key Features:
+1.  Visual Identity: Dark, futuristic theme with "Vertex" (geometric) motifs.
+2.  Services Module: Clearly defined cybersecurity solutions (Pentest, SOC, Compliance).
+3.  LLM Integration: An AI assistant for "Cybersecurity Quick Audit" using the OpenRouter API.
+4.  No-Build Architecture: Pure ESM modules, Tailwind via CDN, and Lucide icons.
+
+### FILE: changelog.md
+``` md
+Description: A premium cybersecurity agency website for Vértice Cybersegurança.
+Files:
+- index.html: Main entry point, layout structure, and CDN imports.
+- styles.css: Custom CSS for glowing effects, gradients, and refined typography.
+- main.js: Application entry point, initializes components.
+- data.js: Content for services, testimonials, and company info.
+- ui_components.js: Reusable UI elements (Navbar, Footer, Hero, ServiceCards).
+- ai_assistant.js: Logic for the "Cyber Guardian" AI chat using OpenRouter.
+- logo_generator.js: Generates the SVG logo dynamically.
+```
+
+### FILE: index.html
+``` html
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vértice Cybersegurança | Proteção Avançada de Dados</title>
+    <meta name="description" content="Soluções de cibersegurança de ponta para sua empresa. Monitoramento 24/7, Pentests e Consultoria LGPD.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80', // Green accent for security
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        dark: {
+                            bg: '#0a0a0a',
+                            surface: '#121212',
+                            border: '#2a2a2a',
+                            text: '#e5e5e5',
+                            muted: '#a3a3a3'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Motion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-dark-bg text-dark-text font-sans antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden">
+
+    <div id="app" class="relative">
+        <!-- Background Elements -->
+        <div class="fixed inset-0 pointer-events-none z-0">
+            <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px]"></div>
+        </div>
+
+        <!-- Content Mount Point -->
+        <div id="mount" class="relative z-10"></div>
+        
+        <!-- AI Chat Widget -->
+        <div id="ai-widget-mount"></div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
+```
+
+### FILE: styles.css
+``` css
+/* Typography & Reset */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphism */
+.glass {
+    background: rgba(18, 18, 18, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+    background: linear-gradient(180deg, rgba(30, 30, 30, 0.4) 0%, rgba(18, 18, 18, 0.4) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-card:hover {
+    border-color: rgba(34, 197, 94, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(34, 197, 94, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Utilities */
+.text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-brand {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+
+/* Animations */
+@keyframes pulse-subtle {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+}
+
+.animate-pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #4ade80;
+}
+
+/* Grid Background */
+.bg-grid {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+```
+
+### FILE: data.js
+``` javascript
+export const companyInfo = {
+    name: "Vértice Cybersegurança",
+    tagline: "Segurança Digital Elevada ao Máximo",
+    description: "Protegemos o ativo mais valioso da sua empresa: a informação. Especialistas em defesa cibernética, compliance e monitoramento contínuo.",
+    contact: {
+        email: "contato@verticecyber.com.br",
+        phone: "+55 (11) 99999-8888",
+        address: "Av. Paulista, 1000 - São Paulo, SP"
+    }
+};
+
+export const services = [
+    {
+        id: "pentest",
+        title: "Pentest Avançado",
+        icon: "shield-alert",
+        description: "Simulação controlada de ataques reais para identificar vulnerabilidades críticas antes que hackers o façam.",
+        features: ["Teste de Intrusão Web", "Infraestrutura Interna", "Engenharia Social"]
+    },
+    {
+        id: "soc",
+        title: "SOC 24/7",
+        icon: "activity",
+        description: "Centro de Operações de Segurança dedicado ao monitoramento, detecção e resposta a incidentes em tempo real.",
+        features: ["Monitoramento Contínuo", "Resposta a Incidentes", "Threat Intelligence"]
+    },
+    {
+        id: "lgpd",
+        title: "Consultoria LGPD",
+        icon: "file-check",
+        description: "Adequação completa à Lei Geral de Proteção de Dados, garantindo conformidade jurídica e segurança da informação.",
+        features: ["Mapeamento de Dados", "Relatório de Impacto", "Treinamento DPO"]
+    },
+    {
+        id: "cloud-sec",
+        title: "Cloud Security",
+        icon: "cloud",
+        description: "Blindagem de ambientes em nuvem (AWS, Azure, GCP) contra acessos não autorizados e vazamento de dados.",
+        features: ["Hardening de Servidores", "Gestão de Identidade", "Criptografia"]
+    }
+];
+
+export const partners = [
+    "Microsoft", "CrowdStrike", "SentinelOne", "AWS", "Fortinet"
+];
+```
+
+### FILE: logo_generator.js
+``` javascript
+export function getLogoSVG(className = "w-8 h-8") {
+    // A geometric vertex-like logo: a triangle/pyramid shape representing stability and precision
+    return `
+    <svg class="${className}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4L4 32H36L20 4Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-brand-500"/>
+        <path d="M20 14L12 28H28L20 14Z" fill="currentColor" class="text-brand-500 opacity-50"/>
+        <circle cx="20" cy="4" r="3" fill="currentColor" class="text-white"/>
+        <circle cx="4" cy="32" r="3" fill="currentColor" class="text-white"/>
+        <circle cx="36" cy="32" r="3" fill="currentColor" class="text-white"/>
+    </svg>
+    `;
+}
+```
+
+### FILE: ui_components.js
+``` javascript
+import { getLogoSVG } from './logo_generator.js';
+
+export const Navbar = (company) => `
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer group">
+                <div class="transition-transform duration-300 group-hover:scale-110">
+                    ${getLogoSVG('w-10 h-10')}
+                </div>
+                <span class="text-xl font-bold tracking-tight text-white group-hover:text-brand-400 transition-colors">
+                    VÉRTICE
+                </span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#services" class="text-sm font-medium text-dark-muted hover:text-brand-400 transition-colors">Soluções</a>
+                <a href="#about" class="text-sm font-medium text-dark-muted hover:text-brand-400 transition-colors">Sobre</a>
+                <a href="#compliance" class="text-sm font-medium text-dark-muted hover:text-brand-400 transition-colors">Compliance</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="document.getElementById('contact').scrollIntoView()" 
+                    class="hidden md:flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-sm font-semibold transition-all hover:shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+                    Fale com Especialista
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+                <button class="md:hidden text-white" id="mobile-menu-btn">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+`;
+
+export const Hero = (company) => `
+    <section class="relative min-h-screen flex items-center pt-20 bg-grid overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 z-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold uppercase tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                    Segurança Ofensiva & Defensiva
+                </div>
+                
+                <h1 class="text-5xl lg:text-7xl font-bold leading-tight tracking-tight text-white">
+                    Proteção invisível,<br>
+                    <span class="text-gradient-brand">Defesa implacável.</span>
+                </h1>
+                
+                <p class="text-lg text-dark-muted max-w-xl leading-relaxed">
+                    ${company.description} A Vértice combina inteligência artificial e expertise humana para blindar sua infraestrutura.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-4">
+                    <button onclick="document.getElementById('services').scrollIntoView()" 
+                        class="px-8 py-4 bg-white text-black rounded-lg font-bold hover:bg-gray-100 transition-colors flex items-center gap-2">
+                        Ver Soluções
+                    </button>
+                    <button onclick="window.openChat()"
+                        class="px-8 py-4 glass-card text-white rounded-lg font-medium hover:bg-white/5 transition-colors flex items-center gap-2 border border-white/10">
+                        <i data-lucide="bot" class="w-5 h-5 text-brand-400"></i>
+                        Diagnóstico com IA
+                    </button>
+                </div>
+            </div>
+
+            <div class="relative lg:h-[600px] flex items-center justify-center">
+                <!-- Abstract Cyber Visualization -->
+                <div class="relative w-full h-full">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-transparent rounded-full blur-[100px]"></div>
+                    <svg class="w-full h-full animate-pulse-subtle" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#14532d;stop-opacity:0" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="250" cy="250" r="200" stroke="url(#grad1)" stroke-width="1" fill="none" opacity="0.5"/>
+                        <circle cx="250" cy="250" r="150" stroke="url(#grad1)" stroke-width="1" fill="none" opacity="0.7"/>
+                        <circle cx="250" cy="250" r="100" stroke="url(#grad1)" stroke-width="2" fill="none"/>
+                        
+                        <!-- Floating Shield -->
+                        <path d="M250 150 L320 180 V250 C320 300 250 340 250 340 C250 340 180 300 180 250 V180 L250 150 Z" 
+                              fill="rgba(34, 197, 94, 0.1)" stroke="#22c55e" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+`;
+
+export const ServiceCard = (service) => `
+    <div class="glass-card p-8 rounded-2xl group hover:bg-white/[0.02]">
+        <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <i data-lucide="${service.icon}" class="w-6 h-6 text-brand-400"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">${service.title}</h3>
+        <p class="text-dark-muted text-sm leading-relaxed mb-6">
+            ${service.description}
+        </p>
+        <ul class="space-y-2 mb-6 border-t border-white/5 pt-4">
+            ${service.features.map(f => `
+                <li class="flex items-center gap-2 text-xs text-dark-muted">
+                    <i data-lucide="check" class="w-3 h-3 text-brand-500"></i>
+                    ${f}
+                </li>
+            `).join('')}
+        </ul>
+        <a href="#contact" class="inline-flex items-center text-sm font-semibold text-brand-400 hover:text-brand-300 group-hover:translate-x-1 transition-transform">
+            Saiba mais <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+        </a>
+    </div>
+`;
+
+export const Footer = (company) => `
+    <footer class="bg-black border-t border-white/10 pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 mb-16">
+            <div class="col-span-1 md:col-span-2 space-y-6">
+                <div class="flex items-center gap-2">
+                    ${getLogoSVG('w-8 h-8')}
+                    <span class="text-xl font-bold text-white">VÉRTICE</span>
+                </div>
+                <p class="text-dark-muted max-w-sm">
+                    Elevando os padrões de segurança digital para proteger o futuro do seu negócio.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-all text-dark-muted">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-all text-dark-muted">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-bold mb-6">Serviços</h4>
+                <ul class="space-y-4 text-sm text-dark-muted">
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Pentest</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">SOC Gerenciado</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Consultoria LGPD</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Threat Hunting</a></li>
+                </ul>
+            </div>
+
+            <div id="contact">
+                <h4 class="text-white font-bold mb-6">Contato</h4>
+                <ul class="space-y-4 text-sm text-dark-muted">
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="mail" class="w-4 h-4 text-brand-500"></i>
+                        ${company.contact.email}
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="phone" class="w-4 h-4 text-brand-500"></i>
+                        ${company.contact.phone}
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-brand-500"></i>
+                        ${company.contact.address}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-white/5 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs text-dark-muted">
+            <p>&copy; 2024 Vértice Cybersegurança. Todos os direitos reservados.</p>
+            <div class="flex gap-6 mt-4 md:mt-0">
+                <a href="#" class="hover:text-white">Privacidade</a>
+                <a href="#" class="hover:text-white">Termos</a>
+            </div>
+        </div>
+    </footer>
+`;
+```
+
+### FILE: ai_assistant.js
+``` javascript
+export class AiAssistant {
+    constructor() {
+        this.isOpen = false;
+        this.messages = [
+            { role: 'assistant', content: 'Olá! Sou a V-IA, inteligência da Vértice. Como posso ajudar a proteger sua empresa hoje? Posso sugerir soluções baseadas no seu cenário.' }
+        ];
+        this.render();
+    }
+
+    toggle() {
+        this.isOpen = !this.isOpen;
+        this.render();
+    }
+
+    async sendMessage(text) {
+        if (!text.trim()) return;
+
+        this.messages.push({ role: 'user', content: text });
+        this.render();
+
+        // Simulate thinking UI
+        const thinkingId = 'thinking-' + Date.now();
+        this.messages.push({ role: 'assistant', content: 'Analisando...', id: thinkingId });
+        this.render();
+
+        try {
+            const response = await fetch("https://dev-edge.flowith.net/api-proxy/" + encodeURIComponent("https://openrouter.ai/api/v1/chat/completions"), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer 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", // Provided key
+                    "HTTP-Referer": "https://verticecyber.com",
+                    "X-Title": "Vertice Cyber"
+                },
+                body: JSON.stringify({
+                    model: "deepseek/deepseek-chat-v3-0324:free", // Using free model as requested
+                    messages: [
+                        { role: "system", content: "You are V-IA, a cybersecurity expert assistant for Vértice Cybersegurança. Be concise, professional, and helpful. Sell services like Pentest, SOC, and Compliance. Language: Portuguese (Brazil)." },
+                        ...this.messages.filter(m => !m.id)
+                    ]
+                })
+            });
+
+            const data = await response.json();
+            const reply = data.choices?.[0]?.message?.content || "Desculpe, tive um problema de conexão. Pode tentar novamente?";
+            
+            // Remove thinking and add real reply
+            this.messages = this.messages.filter(m => m.id !== thinkingId);
+            this.messages.push({ role: 'assistant', content: reply });
+
+        } catch (error) {
+            console.error(error);
+            this.messages = this.messages.filter(m => m.id !== thinkingId);
+            this.messages.push({ role: 'assistant', content: "Erro ao conectar com o servidor de segurança." });
+        }
+        
+        this.render();
+    }
+
+    render() {
+        const container = document.getElementById('ai-widget-mount');
+        if (!container) return;
+
+        if (!this.isOpen) {
+            container.innerHTML = `
+                <button onclick="window.toggleChat()" 
+                    class="fixed bottom-6 right-6 w-14 h-14 bg-brand-600 rounded-full shadow-lg flex items-center justify-center text-white hover:bg-brand-500 hover:scale-110 transition-all z-50 group">
+                    <i data-lucide="message-square" class="w-6 h-6"></i>
+                    <span class="absolute right-0 top-0 w-3 h-3 bg-red-500 rounded-full border-2 border-black"></span>
+                </button>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="fixed bottom-6 right-6 w-[90vw] md:w-[400px] h-[500px] bg-dark-surface border border-white/10 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden animate-fade-in-up">
+                    <!-- Header -->
+                    <div class="p-4 bg-brand-900/20 border-b border-white/5 flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-500/20 flex items-center justify-center">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-brand-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">V-IA Security</h3>
+                                <p class="text-xs text-brand-400 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-pulse"></span> Online
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="window.toggleChat()" class="text-dark-muted hover:text-white">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4" id="chat-messages">
+                        ${this.messages.map(msg => `
+                            <div class="flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}">
+                                <div class="max-w-[80%] rounded-2xl p-3 text-sm ${
+                                    msg.role === 'user' 
+                                    ? 'bg-brand-600 text-white rounded-tr-none' 
+                                    : 'bg-white/5 text-dark-text rounded-tl-none border border-white/5'
+                                }">
+                                    ${msg.content}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Input -->
+                    <form onsubmit="event.preventDefault(); window.sendChat(this.elements.msg.value); this.reset();" 
+                        class="p-4 border-t border-white/5 bg-black/20">
+                        <div class="relative">
+                            <input name="msg" type="text" placeholder="Digite sua dúvida..." 
+                                class="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-4 pr-12 text-sm text-white focus:outline-none focus:border-brand-500/50 focus:bg-white/10 transition-all">
+                            <button type="submit" class="absolute right-1 top-1 w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center text-white hover:bg-brand-400 transition-colors">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            // Auto scroll to bottom
+            const msgContainer = document.getElementById('chat-messages');
+            if(msgContainer) msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+        
+        lucide.createIcons();
+    }
+}
+```
+
+### FILE: main.js
+``` javascript
+import { companyInfo, services, partners } from './data.js';
+import { Navbar, Hero, ServiceCard, Footer } from './ui_components.js';
+import { AiAssistant } from './ai_assistant.js';
+
+// Init AI
+const ai = new AiAssistant();
+window.toggleChat = () => ai.toggle();
+window.sendChat = (msg) => ai.sendMessage(msg);
+window.openChat = () => {
+    if (!ai.isOpen) ai.toggle();
+};
+
+// Render Main App
+document.getElementById('mount').innerHTML = `
+    ${Navbar(companyInfo)}
+    
+    <main>
+        ${Hero(companyInfo)}
+
+        <!-- Stats Section -->
+        <section class="border-y border-white/5 bg-black/20 backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+                ${[
+                    ['+500', 'Projetos Entregues'],
+                    ['99.9%', 'Uptime Garantido'],
+                    ['24/7', 'Monitoramento'],
+                    ['ISO', '27001 Certified']
+                ].map(([val, label]) => `
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white mb-1">${val}</div>
+                        <div class="text-xs text-dark-muted uppercase tracking-wider">${label}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="section-padding relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Soluções Corporativas</h2>
+                    <p class="text-dark-muted max-w-2xl mx-auto">
+                        Abordagem 360º para segurança da informação. Identificamos, protegemos, detectamos e respondemos.
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    ${services.map(ServiceCard).join('')}
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners Section -->
+        <section class="py-12 border-y border-white/5 bg-white/[0.02]">
+            <div class="max-w-7xl mx-auto px-6">
+                <p class="text-center text-sm text-dark-muted mb-8 uppercase tracking-widest">Tecnologias que utilizamos</p>
+                <div class="flex flex-wrap justify-center gap-12 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                    ${partners.map(p => `
+                        <div class="text-xl font-bold text-white">${p}</div>
+                    `).join('')}
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section-padding relative overflow-hidden">
+            <div class="absolute inset-0 bg-brand-900/10"></div>
+            <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+                <h2 class="text-4xl font-bold text-white mb-6">Sua empresa está segura hoje?</h2>
+                <p class="text-lg text-dark-muted mb-10">
+                    Não espere o incidente acontecer. Agende uma avaliação gratuita de vulnerabilidades iniciais com nossos engenheiros.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="document.getElementById('contact').scrollIntoView()" class="px-8 py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-lg font-bold transition-all w-full sm:w-auto">
+                        Agendar Diagnóstico Gratuito
+                    </button>
+                    <button class="px-8 py-4 bg-transparent border border-white/20 hover:bg-white/5 text-white rounded-lg font-bold transition-all w-full sm:w-auto">
+                        Baixar Portfólio PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    ${Footer(companyInfo)}
+`;
+
+// Initialize Icons
+lucide.createIcons();
+
+// Animations
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.utils.toArray('.glass-card').forEach((card, i) => {
+    gsap.from(card, {
+        scrollTrigger: {
+            trigger: card,
+            start: "top bottom-=100",
+            toggleActions: "play none none reverse"
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.6,
+        delay: i * 0.1
+    });
+});
+```
+
+<fbd4a_OUTPUT_COMPLETED>

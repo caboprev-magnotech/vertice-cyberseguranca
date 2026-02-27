@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vértice Cybersegurança | Proteção Avançada de Dados</title>
+    <meta name="description" content="Soluções de cibersegurança de ponta para sua empresa. Monitoramento 24/7, Pentests e Consultoria LGPD.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80', // Green accent for security
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        dark: {
+                            bg: '#0a0a0a',
+                            surface: '#121212',
+                            border: '#2a2a2a',
+                            text: '#e5e5e5',
+                            muted: '#a3a3a3'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Motion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-dark-bg text-dark-text font-sans antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden">
+
+    <div id="app" class="relative">
+        <!-- Background Elements -->
+        <div class="fixed inset-0 pointer-events-none z-0">
+            <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px]"></div>
+        </div>
+
+        <!-- Content Mount Point -->
+        <div id="mount" class="relative z-10"></div>
+        
+        <!-- AI Chat Widget -->
+        <div id="ai-widget-mount"></div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
